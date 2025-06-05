@@ -1,120 +1,105 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Site de Apostas Simples</title>
+  <meta charset="UTF-8">
+  <title>Mini Jogo de Apostas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
+      background: #121212;
       font-family: Arial, sans-serif;
-      background: #222;
-      color: #eee;
+      color: #fff;
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      padding: 20px;
-      min-height: 100vh;
-      margin: 0;
-    }
-    h1 {
-      margin-bottom: 10px;
+      height: 100vh;
     }
     .container {
-      background: #333;
-      padding: 20px;
-      border-radius: 8px;
-      max-width: 400px;
-      width: 100%;
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+      text-align: center;
     }
-    label {
-      display: block;
-      margin-top: 10px;
-      margin-bottom: 5px;
-    }
-    select, input[type="number"] {
+    h1 { margin-bottom: 20px; }
+    input, select {
       width: 100%;
-      padding: 8px;
-      border-radius: 4px;
+      padding: 12px;
+      margin: 10px 0;
       border: none;
+      border-radius: 8px;
       font-size: 16px;
     }
     button {
-      margin-top: 15px;
-      padding: 10px;
       width: 100%;
+      padding: 15px;
+      background: #e50914;
+      color: #fff;
       font-size: 18px;
-      background: #0a8;
       border: none;
-      border-radius: 6px;
-      color: white;
+      border-radius: 8px;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: 0.3s;
     }
     button:hover {
-      background: #07a;
+      background: #c40812;
     }
     .result {
       margin-top: 20px;
       font-size: 20px;
       font-weight: bold;
-      text-align: center;
     }
   </style>
 </head>
 <body>
-  <h1>Site de Apostas Simples</h1>
-  <div class="container">
-    <p><strong>Evento:</strong> Time A vs Time B</p>
-    <label for="betChoice">Escolha sua aposta:</label>
-    <select id="betChoice">
-      <option value="A">Time A vence</option>
-      <option value="Draw">Empate</option>
-      <option value="B">Time B vence</option>
-    </select>
-    <label for="betAmount">Valor da aposta (R$):</label>
-    <input type="number" id="betAmount" min="1" step="1" placeholder="Digite o valor da aposta" />
-    <button id="placeBetBtn">Fazer Aposta</button>
-    <div class="result" id="result"></div>
-  </div>
 
-  <script>
-    const placeBetBtn = document.getElementById('placeBetBtn');
-    const betChoice = document.getElementById('betChoice');
-    const betAmount = document.getElementById('betAmount');
-    const resultDiv = document.getElementById('result');
+<div class="container">
+  <h1>Jogo de Apostas</h1>
+  <label>Valor da Aposta (R$):</label>
+  <input type="number" id="betAmount" placeholder="Digite o valor" min="1">
+  
+  <label>Escolha:</label>
+  <select id="betChoice">
+    <option value="Par">Par</option>
+    <option value="Ímpar">Ímpar</option>
+  </select>
+  
+  <button id="placeBet">Apostar</button>
+  
+  <div class="result" id="result"></div>
+</div>
 
-    // Odds simuladas (para multiplicar o valor da aposta)
-    const odds = {
-      'A': 2.0,
-      'Draw': 3.0,
-      'B': 2.5
-    };
+<script>
+  const placeBetBtn = document.getElementById('placeBet');
+  const betAmount = document.getElementById('betAmount');
+  const betChoice = document.getElementById('betChoice');
+  const resultDiv = document.getElementById('result');
 
-    placeBetBtn.addEventListener('click', () => {
-      const choice = betChoice.value;
-      const amount = parseFloat(betAmount.value);
+  placeBetBtn.addEventListener('click', () => {
+    const amount = parseFloat(betAmount.value);
+    const choice = betChoice.value;
 
-      if (!amount || amount <= 0) {
-        resultDiv.textContent = 'Por favor, insira um valor válido para apostar.';
-        resultDiv.style.color = 'yellow';
-        return;
-      }
+    if (!amount || amount <= 0) {
+      resultDiv.textContent = "Insira um valor válido!";
+      resultDiv.style.color = "yellow";
+      return;
+    }
 
-      // Simula o resultado do evento aleatoriamente
-      const possibleResults = ['A', 'Draw', 'B'];
-      const eventResult = possibleResults[Math.floor(Math.random() * possibleResults.length)];
+    // Simula número aleatório entre 1 e 10
+    const number = Math.floor(Math.random() * 10) + 1;
+    const resultType = number % 2 === 0 ? "Par" : "Ímpar";
 
-      if (choice === eventResult) {
-        // Ganhou
-        const winnings = amount * odds[choice];
-        resultDiv.textContent = `Parabéns! Você ganhou R$${winnings.toFixed(2)} (Aposta: R$${amount})`;
-        resultDiv.style.color = '#0f0';
-      } else {
-        // Perdeu
-        resultDiv.textContent = `Você perdeu R$${amount}. Resultado: ${eventResult === 'A' ? 'Time A venceu' : eventResult === 'B' ? 'Time B venceu' : 'Empate'}.`;
-        resultDiv.style.color = '#f00';
-      }
-    });
-  </script>
+    if (choice === resultType) {
+      const winnings = amount * 1.9; // Exemplo: retorno de 1.9x
+      resultDiv.textContent = `Você GANHOU R$${winnings.toFixed(2)}! Número sorteado: ${number}`;
+      resultDiv.style.color = "lime";
+    } else {
+      resultDiv.textContent = `Você PERDEU R$${amount}. Número sorteado: ${number}`;
+      resultDiv.style.color = "red";
+    }
+  });
+</script>
+
 </body>
 </html>
